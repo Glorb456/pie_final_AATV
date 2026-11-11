@@ -1,5 +1,5 @@
 # Pico W servo sweep demo (MicroPython)
-# Servos on GP15 (physical pin 20) and GP14 (physical pin 19)
+# Servos on GP12-GP15 (physical pins 16, 17, 19, 20)
 from machine import Pin, PWM
 import time
 
@@ -7,19 +7,16 @@ r1 = PWM(Pin(15))
 r2 = PWM(Pin(14))
 r3 = PWM(Pin(13))
 r4 = PWM(Pin(12))
+servos = (r1, r2, r3, r4)
 
-r1.freq(50)
-r2.freq(50)
-r3.freq(50)
-r4.freq(50)
-# standard 50 Hz servo signal
+for s in servos:
+    s.freq(50)  # standard 50 Hz servo signal
+
 
 def set_pulse_us(us):
-    r1.duty_ns(us * 1000)
-    r2.duty_ns(us * 1000)
-    r3.duty_ns(us * 1000)
-    r3.duty_ns(us * 1000)
- 
+    for s in servos:
+        s.duty_ns(us * 1000)
+
 
 try:
     while True:
@@ -28,7 +25,5 @@ try:
             set_pulse_us(us)
             time.sleep(1)
 finally:
-    r1.duty_ns(0)  # stop sending pulses
-    r2.duty_ns(0)
-    r3.duty_ns(0)  # stop sending pulses
-    r4.duty_ns(0)
+    for s in servos:
+        s.duty_ns(0)  # stop sending pulses

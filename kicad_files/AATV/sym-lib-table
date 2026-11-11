@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "AATV")(type "KiCad")(uri "${KIPRJMOD}/AATV.kicad_sym")(options "")(descr "AA-TV custom symbols: ESCs, buck, thruster, USB cable, drybox penetration marker"))
+)

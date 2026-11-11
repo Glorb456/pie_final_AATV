@@ -111,7 +111,7 @@
 					)
 				)
 			)
-			(pin power_in line
+			(pin power_out line
 				(at 11.43 2.54 180)
 				(length 2.54)
 				(name "7.5Vout"
@@ -129,7 +129,7 @@
 					)
 				)
 			)
-			(pin power_out line
+			(pin power_in line
 				(at 11.43 -3.81 180)
 				(length 2.54)
 				(name "OutGnd"
@@ -244,7 +244,7 @@
 			(pin power_in line
 				(at -10.16 0 0)
 				(length 2.54)
-				(name "12V"
+				(name "VBAT"
 					(effects
 						(font
 							(size 1.27 1.27)

@@ -1,0 +1,27 @@
+.diagram{display:block;width:100%;height:auto;font-family:"IBM Plex Sans",system-ui,sans-serif}
+.diagram .panel{fill:var(--panel)}
+.diagram .halo{fill:none;stroke:var(--panel);stroke-linecap:round;stroke-linejoin:round}
+.diagram .wo{fill:none;stroke:#141a20;stroke-linecap:round;stroke-linejoin:round}
+.diagram .drybox{fill:var(--dry);stroke:var(--sea);stroke-width:3}
+.diagram .wetzone{stroke:var(--sea);stroke-width:2;stroke-dasharray:10 7}
+.diagram .waterline{stroke:var(--wave);stroke-width:1.2}
+.diagram .zone{font:700 19px "Barlow Condensed",sans-serif;letter-spacing:.06em;fill:var(--sea)}
+.diagram .zones{font:500 14px "Barlow Condensed",sans-serif;fill:var(--muted)}
+.diagram .board{font:700 15px "Barlow Condensed",sans-serif;letter-spacing:.05em;fill:#5c4a24}
+.diagram .ref{font:600 12px "IBM Plex Sans",sans-serif;fill:var(--ink)}
+.diagram .refw{font:700 12px "IBM Plex Sans",sans-serif;fill:var(--sea)}
+.diagram .small{font:400 10.5px "IBM Plex Sans",sans-serif;fill:var(--muted)}
+.diagram .pin{font:500 9.5px "IBM Plex Mono",monospace;fill:#3b3220}
+.diagram .pinw{font:500 8.5px "IBM Plex Mono",monospace;fill:#f1f3f5}
+.diagram .dev{font:600 12px "IBM Plex Sans",sans-serif;fill:var(--ink)}
+.diagram .devw{font:600 12px "IBM Plex Sans",sans-serif;fill:#f8f9fa}
+.diagram .devs{font:400 9.5px "IBM Plex Sans",sans-serif;fill:#ced4da}
+.diagram .devd{font:700 12px "IBM Plex Sans",sans-serif;fill:#212529}
+.diagram .tag{font:600 10px "IBM Plex Mono",monospace}
+.diagram text{paint-order:stroke}
+.diagram .net{font:600 9.5px "IBM Plex Mono",monospace;fill:#3b3220;stroke:#efe4c4;stroke-width:3px}
+.diagram .ctag{fill:#fff;stroke:#3a4650;stroke-width:1}
+.diagram .ctagt{font:600 10px "IBM Plex Mono",monospace;fill:#1b2630}
+.diagram .dtname{font:700 12.5px "IBM Plex Sans",sans-serif;fill:#c2410c}
+.diagram .tpin{font:500 8.5px "IBM Plex Mono",monospace;fill:#3b3220}
+.diagram .planbox{fill:#fff;fill-opacity:.85;stroke:var(--sea);stroke-width:1.5;stroke-dasharray:6 5}
