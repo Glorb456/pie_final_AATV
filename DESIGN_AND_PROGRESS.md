@@ -6,14 +6,15 @@ This is the plain-language summary of where the AA-TV electrical design stands a
 
 ## Where we are
 
-The design is settled enough to build, and most parts are ordered. The drawings are behind: the newest schematic (v9) and the newest wiring diagram (v10 draft) both show an older thruster and an older ballast system. The next job is a v11 schematic and wiring guide that match what is described here.
+The design is settled enough to build, and most parts are ordered. The schematic (v11) matches what is described here. The wiring pictures are behind: the newest wiring diagram (v10 draft) and the last full wiring guide (v9) both show an older thruster and an older ballast system.
 
 | Area | State |
 |---|---|
 | Parts | Main Amazon order placed November 6. Valve, check valve and a few small items still to buy |
-| Bench tests | Servos, MOSFET switches and the buck's low-voltage cutoff all pass |
-| Schematic | v9 is the latest file. It is out of date |
-| Wiring diagram | v10 draft. It is out of date and has one error that would damage a 12 V valve |
+| Bench tests | First full electrical test on the battery passed (November 11): thruster, pump, fuse and kill switch all work, and two servos run fine. Four servos at once melted the breadboard power wires |
+| Next build step | Move the circuit onto the soldered breadboard and build the solenoid valve switch |
+| Schematic | v11, drawn November 11. Up to date and checked net by net |
+| Wiring diagram | v10 draft. Out of date; use the v11 schematic until it is redrawn |
 | Firmware | Servo sweep and pump on/off test scripts exist. No vehicle firmware yet |
 
 ## The current design
@@ -61,19 +62,19 @@ This limits how much the ballast can do. At 1 m deep, only about 9% of the tank'
 
 | Part | Choice | Status |
 |---|---|---|
-| Thruster | ApisQueen U92 Pro 12 V, speed controller built in | Chosen (replaced an out-of-stock model) |
+| Thruster | ApisQueen U92 Pro 12 V, speed controller built in | In hand, tested (replaced an out-of-stock model) |
 | Servos | 2 Hitec DB777WP, 2 Savox SW-1250MG | Owned |
 | Battery | Zeee 3S 5200 mAh, EC5 plug, pack of two | Ordered |
 | Servo supply | WSOLDMA 12 V to 7.5 V, 20 A | Ordered, tested |
 | Pump supply | 12 V to 24 V boost, 3 A | Ordered |
-| Pump | Rule 28D bilge pump, 24 V | Owned (free) |
+| Pump | Rule 28D bilge pump, 24 V | Owned (free), tested |
 | Valve | 24 V, normally closed, direct-acting | Not chosen |
 | Check valve | Low opening pressure, to fit the pump hose | Not chosen |
 | Pump and valve switches | IRLZ44N MOSFETs, 1N5822 diodes | Ordered, tested |
 | Battery monitor | ADS1115 board | Ordered |
 | Box | Otdorpatio IP67 with four M16 glands | Ordered (size to confirm) |
-| Fuses | Blade fuse kit with six inline holders | Ordered |
-| Kill switch | 30 A waterproof rocker | Ordered |
+| Fuses | Blade fuse kit with six inline holders | In hand, tested |
+| Kill switch | 30 A waterproof rocker | In hand, tested |
 
 The full list with links and prices is in the BOM Google Sheet. Rows highlighted green are ordered.
 
@@ -84,8 +85,29 @@ The full list with links and prices is in the BOM Google Sheet. Rows highlighted
 | Both servo types driven straight from the Pico's 3.3 V signal | Work |
 | MOSFET switching the pump from a Pico pin | Works |
 | Servo converter fed a falling input voltage, no load | Output held until 9 V, which is below where the battery should ever go |
+| Servo converter output voltage | About 7.63 V. Fine for both servo types |
+| 24 V converter's input fuse | 10 A (red). Correct |
+| 24 V converter's two ground wires | Connected to each other, as the switches need |
+| Thruster powered from 12 V with no signal | Speed controller played its start-up tones |
+| First full electrical test, everything on the battery (see below) | Passed with two servos. Four servos melted the power wires |
+
+### First full electrical test (November 11)
+
+Everything ran from the battery through the main power lead: EC5 plug, 25 A fuse, kill switch and bus bar.
+
+- **Thruster:** fully working.
+- **Bilge pump:** fully working through the 24 V converter and its MOSFET switch.
+- **Fuse and kill switch:** both work.
+- **Servos:** two servos ran fine. With all four connected, the power wires feeding the servos melted. Back on two servos, everything worked again.
+
+**Lesson:** the temporary breadboard wires are far too thin for the servo current. Four servos can pull over 13 A together when they strain, and breadboard contacts and jumper wires are good for about 1 A. In the final wiring, the 7.5 V servo supply must run in heavy-gauge wire (14 AWG, the thick wire, as already planned), soldered point to point and never through breadboard strips or jumpers.
 
 ## What is still open
+
+**Next build steps**
+- Move the circuit from the test breadboard to the soldered breadboard, with the servo power in 14 AWG wire.
+- Build the solenoid valve circuit: the second MOSFET switch with its diode and resistors, driven from the Pico's valve pin. It can be built and tested before the valve itself is chosen.
+- Once the servo power is in thick wire, run all four servos together again.
 
 **To decide or buy**
 - The valve. It should be 24 V so it can share the pump's supply.
@@ -95,21 +117,19 @@ The full list with links and prices is in the BOM Google Sheet. Rows highlighted
 **To test**
 - The pump starting from the 24 V converter with the battery low (about 10 V).
 - Thruster current at the planned throttle limit.
-- The servo converter's exact output voltage. Up to about 7.6 V is fine.
-- The value printed on the 24 V converter's input fuse. It needs to be 7.5 to 10 A.
 
 **To measure**
 - The air volume of the sealed tank. This sets how much the ballast can change the vehicle's weight.
 - The thruster cable's diameter against the gland.
 - Which box size arrived, and that it fits the hull.
 
-**To draw**
-- v11 schematic and wiring guide.
+**To draw and write**
+- Wiring diagram and guide for v11.
 - Vehicle firmware: throttle limit, battery limits, pump and valve interlock.
 
-## Corrections to apply when reading the current drawings
+## Corrections to apply when reading the older drawings
 
-Until v11 exists, these override the v9 schematic and the v10 draft diagram:
+The v11 schematic already has these. They override the v9 schematic, the v9 wiring guide and the v10 draft diagram:
 
 1. The thruster's speed controller is inside the thruster, not inside the box. Two power wires and a signal pair pass through the thruster gland.
 2. There is no pump speed controller and no Deutsch connector. The pump is switched by a MOSFET.
@@ -138,12 +158,14 @@ Until v11 exists, these override the v9 schematic and the v10 draft diagram:
 | Nov 7 to 11 | Bench work | Pump switch built and tested on a breadboard. Servos tested from the Pico | |
 | Nov 11 | Design review | Full check of drawings against the parts and datasheets. Found the drawings out of date and the valve drawn on the wrong voltage. Battery-monitor resistors redesigned around the values on hand | Parts had changed since the drawings were made |
 | Nov 11 | Ballast | Tank changed from vented to sealed. Check valve added to the plan. Fuse after the 24 V converter removed. Servo converter cutoff measured at 9 V | Simpler plumbing; fewer parts |
+| Nov 11 | v11 | Schematic redrawn with the new thruster, the 24 V pump and valve switches, the new battery-monitor resistors and the 25 A fuse. Main power lead (plug, fuse, kill switch, bus bar) being assembled | Bring the schematic in line with the parts |
+| Nov 11 | First full electrical test | Thruster, pump, fuse and kill switch all work from the battery. Two servos fine; four melted the breadboard power wires. Decision: servo power in heavy-gauge wire for the final build | Check the whole system together before soldering |
 
 ## Where things are
 
 | What | Where |
 |---|---|
-| Latest schematic | `kicad_files/AATV_v9/AATV_v9.kicad_sch` and `AATV_v9.pdf` |
+| Latest schematic | `kicad_files/AATV_v11/AATV_v11.kicad_sch` and `AATV_v11.pdf` |
 | Latest wiring diagram | `../AATV_wiring_v10_draft.png` |
 | Last complete wiring guide | `../AATV_wiring_guide_v9.html` |
 | Older schematics and guides | `kicad_files/AATV/` and `../old-wiring/` |

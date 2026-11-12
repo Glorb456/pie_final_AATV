@@ -4,6 +4,48 @@ Newest first. Each entry says what changed, why, and which files carry it.
 
 ---
 
+## v11 — 2026-11-11 · Built-in-ESC thruster, 24 V pump + valve on MOSFET switches, sealed tank
+
+v10 was only ever a draft wiring diagram (`../AATV_wiring_v10_draft.png`, 2026-11-06). This entry covers everything since v9.
+
+**Decisions (from the team)**
+- Ballast pump is a free Rule 28D bilge pump: 24 V, 1.3 A, one direction (water out). A normally closed solenoid valve lets water in.
+- Pump and valve are switched on/off by the Pico through MOSFETs. No pump ESC.
+- Thruster is an ApisQueen U92 Pro 12 V with the ESC built in (the TD1.2 went out of stock). Higher current: 17 A at 12 V and full throttle, to be capped in firmware.
+- Ballast tank is sealed (no vent to the surface).
+- No fuse after the boost. Its own fuse sits on the red input lead.
+- All fuses are standard blades from one kit. Main fuse 25 A.
+- Resistors come from the lab stock: 200, 1k, 2.2k, 4.99k, 10k, 20k, 30k, 100k, 200k, 499k.
+
+**Design changes vs v9**
+- Removed: thruster ESC U2 (now inside the thruster), pump ESC U3, Deutsch D2, the pump drybox, R15 / R16 / C5 (already on the ADS1115 breakout).
+- Thruster MT1: power pair to the +12 V and GND bus rows, signal pair to TB4, all through G2 (potted). XT60 cut off to pass the gland.
+- New 24 V rail: +12 V bus -> F2 (boost's built-in input fuse, 7.5-10 A mini blade) -> boost U5 -> V24.
+- New switch board U6: Q1 / Q2 IRLZ44N low-side switches, D3 / D4 1N5822 flyback diodes, R14 / R18 10k gate pull-downs.
+- Pump M3: + on V24, - to Q1. Valve SV1: + on V24, - to Q2. Leads through G3 (potted).
+- Pico: GP19 -> R6 -> TB5 -> Q1 gate (PUMP_EN). GP18 -> R17 -> TB8 -> Q2 gate (VALVE_EN).
+- Every series resistor is 200 ohm (was 220).
+- Battery-monitor dividers: 100k/200k, 200k/100k, 100k/30k (were 47k, 200k, 330k over 100k). Firmware scale x1.500, x3.000, x4.333.
+- F1 25 A (was 30 A). Servo rail is 7.5 V fixed (net SERVO_7V5); the WSOLDMA buck is not adjustable.
+- C1 is 1000 uF 35 V.
+
+**Checks run**
+- Netlist exported and compared against the plan automatically: 35 nets, 179 pins, 0 mismatches. Part values checked from the same export.
+- ERC not run (kicad-cli 7 has no ERC); run it in KiCad 10.
+- Bench: both servo types work on the Pico's 3.3 V signal; IRLZ44N switches the pump from a Pico pin; buck output drops out at 9 V in (no load).
+
+**Files**
+- `kicad_files/AATV_v11/AATV_v11.kicad_sch` + `AATV_v11.pdf`; generator `tools/schematic_gen/layout8.py` (`python3 layout8.py out.kicad_sch [out.kicad_sym]`).
+- Wiring guide not redrawn yet. `../AATV_wiring_v10_draft.png` is the newest picture and still shows the old thruster, F2 / F3 after the boost and the old divider values.
+
+**Open items**
+- Valve not chosen. The schematic assumes 24 V. A 12 V valve must be fed from the +12 V bus through a 2 A fuse, not from V24.
+- Check valve on the pump outlet (plumbing, not on the schematic).
+- Pump start through the boost at about 10 V battery; thruster current at the throttle cap; buck output voltage.
+- 100 nF capacitors C2-C4 not in hand yet.
+
+---
+
 ## v9 — 2026-11-06 · Single IP67 main box (proposal; v8.3 kept)
 
 **Decisions (from the team)**
